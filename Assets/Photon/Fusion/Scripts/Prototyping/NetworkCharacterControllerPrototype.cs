@@ -13,7 +13,7 @@ public class NetworkCharacterControllerPrototype : NetworkTransform {
   public float acceleration  = 10.0f;
   public float braking       = 10.0f;
   public float maxSpeed      = 2.0f;
-  public float rotationSpeed = 15.0f;
+  public float rotationSpeed = 1.0f;
 
   [Networked]
   [HideInInspector]
@@ -33,7 +33,7 @@ public class NetworkCharacterControllerPrototype : NetworkTransform {
   /// Sets the default teleport interpolation angular velocity to be the CC's rotation speed on the Z axis.
   /// For more details on how this field is used, see <see cref="NetworkTransform.TeleportToRotation"/>.
   /// </summary>
-  protected override Vector3 DefaultTeleportInterpolationAngularVelocity => new Vector3(0f, 0f, rotationSpeed);
+  protected override Vector3 DefaultTeleportInterpolationAngularVelocity => new Vector3(50f, 50f, rotationSpeed);
 
   public CharacterController Controller { get; private set; }
 
@@ -72,12 +72,19 @@ public class NetworkCharacterControllerPrototype : NetworkTransform {
   /// <param name="overrideImpulse">Optional field to override the jump impulse. If null, <see cref="jumpImpulse"/> is used.</param>
   /// </summary>
   public virtual void Jump(bool ignoreGrounded = false, float? overrideImpulse = null) {
-    if (IsGrounded || ignoreGrounded) {
-      var newVel = Velocity;
-      newVel.y += overrideImpulse ?? jumpImpulse;
-      Velocity =  newVel;
+    //if (IsGrounded || ignoreGrounded) {
+    //  var newVel = Velocity;
+    //  newVel.y += overrideImpulse ?? jumpImpulse;
+    //  Velocity =  newVel;
+    //}
+
+        if (!IsGrounded)
+        {
+            var newVel = Velocity;
+            newVel.y += jumpImpulse;
+            Velocity = newVel;
+        }
     }
-  }
 
   /// <summary>
   /// Basic implementation of a character controller's movement function based on an intended direction.

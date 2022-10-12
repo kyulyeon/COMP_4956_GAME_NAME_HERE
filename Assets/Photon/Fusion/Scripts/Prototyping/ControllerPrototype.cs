@@ -15,7 +15,8 @@ public class ControllerPrototype : Fusion.NetworkBehaviour {
   public bool TransformLocal = false;
 
   [DrawIf(nameof(ShowSpeed), Hide = true)]
-  public float Speed = 6f;
+  //public float Speed = 6f;
+    public float Speed = 25f;
 
   bool ShowSpeed => this && !TryGetComponent<NetworkCharacterControllerPrototype>(out _);
 
@@ -79,6 +80,8 @@ public class ControllerPrototype : Fusion.NetworkBehaviour {
     } else if (_nrb && !_nrb.Rigidbody.isKinematic) {
       _nrb.Rigidbody.AddForce(direction * Speed);
     } else if (_nrb2d && !_nrb2d.Rigidbody.isKinematic) {
+
+      // adding impulse to the rigidbody when jumping
       Vector2 direction2d = new Vector2(direction.x, direction.y + direction.z);
       _nrb2d.Rigidbody.AddForce(direction2d * Speed);
     } else {
